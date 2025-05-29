@@ -34,6 +34,7 @@ db.connect((err) => {
 app.post("/enviar", (req, res) => {
     const {nome , email, mensagem} = req.body;
     const sql = "INSERT INTO info (nome, email, mensagem) VALUES (?, ?, ?)";
+
     db.query(sql, [nome, email, mensagem], (err, result) => {
         if(err){
             console.error("Erro ao inserir:", err);
@@ -44,6 +45,20 @@ app.post("/enviar", (req, res) => {
         }
     });
 });
+
+app.get("/dados", (req, res) => {
+    const sql = "SELECT * FROM info";
+
+    db.query(sql, (err, result) => {
+        if(err){
+            console.error("Erro ao buscar dados: ", err);
+            return res.status(500).send(err);
+        }
+        else{
+            res.json(result);
+        }
+    });
+})
 
 const port = 3001;
 app.listen(port, () => {
